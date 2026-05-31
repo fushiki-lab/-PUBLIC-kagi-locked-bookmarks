@@ -1,0 +1,19 @@
+{
+        "manifest_version": 3,
+        "name": "カギ付きブックマーク(Kagi Locked Bookmarks) BETA",
+        "version": "0.9.1",
+        "description": "誰にも見られたくないブックマークを、パスワードで守る特別なブックマーク。",
+        "icons": {
+                "16": "img/icon16.png",
+                "48": "img/icon48.png",
+                "128": "img/icon128.png"
+        },
+        "permissions": ["activeTab", "storage", "notifications"],
+        "action": {
+                "default_popup": "popup.html",
+                "default_icon": "img/icon128.png"
+        },
+        "background": {
+        "service_worker": "background.js"
+    }
+}

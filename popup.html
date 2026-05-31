@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <meta charset="UTF-8">
+                <link rel="stylesheet" href="style.css">
+        </head>
+        <body>
+                <div id="first-section">
+                        <h3>パスワード認証</h3>
+                        <input type="password" id="passInput" placeholder="パスワードを入力">
+                        <p id="errorMessage" class="error-text"></p>
+                        <button id="unlockBtn">解除</button>
+                        <small>※初期パスワードは 0000 です</small>
+                </div>
+
+                <div id="second-section">
+                        <h3>カギ付きブックマーク<span id="proStatus" class="pro-text-css"></span></h3>
+                        <button id="myButton">このページを保存</button>
+                        <div id="list_container"></div>
+                        
+                        <hr>
+                        <details>
+                                <summary>設定</summary>
+                                <label>
+                                        <input type="checkbox" id="secretModeSwitch">シークレットモードで開く
+                                </label>
+                                <div class="theme-selector">
+                                        <p class="setting-label">テーマ設定</p>
+                                        <div class="theme-buttons">
+                                                <button id="setStandard">標準</button>
+                                                <button id="setDark">ダーク</button>
+                                                <button id="setFlower">お花</button>
+                                        </div>
+                                </div>
+                                <hr>
+                                
+                                <p class="setting-label">パスワード再設定</p>
+                                <input type="password" id="newPassInput" placeholder="新しいパスワード">
+                                <input type="password" id="newPassConfirm" placeholder="確認のためもう一度入力">
+                                <button id="changePassBtn">パスワード変更</button>
+        
+                                <hr>
+                                <p class="setting-label">Pro版ライセンス認証</p>
+                                <input type="text" id="licenseInput" placeholder="ライセンスキーを入力">
+                                <button id="activateBtn">認証する</button>
+                                <small>※Pro版では保存件数が無制限になります。</small>
+                                <p id="versionDisplay"></p>
+                        </details>
+
+                </div>
+
+
+                <script src="popup.js"></script>
+        </body>
+</html>
