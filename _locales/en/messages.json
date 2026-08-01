@@ -1,0 +1,152 @@
+{
+    "comment_1_manifest": {
+        "description": "=========================================================================",
+        "message": "1. マニフェスト設定用 (manifest.json)"
+    },
+    "i18n_extName": {
+        "message": "Kagi Locked Bookmarks BETA"
+    },
+    "i18n_extDesc": {
+        "message": "A special bookmark manager protected by a password. Made in Japan & source code is public for high transparency."
+    },
+
+    "comment_2_first_section": {
+        "description": "=========================================================================",
+        "message": "2. パスワード認証画面 (popup.html: #first-section)"
+    },
+    "i18n_passAuth": {
+        "message": "Password Authentication"
+    },
+    "i18n_labelPassInput": {
+        "message": "Password input field"
+    },
+    "i18n_placeholderPass": {
+        "message": "Enter password"
+    },
+    "i18n_unlock": {
+        "message": "Unlock"
+    },
+    "i18n_initPassWarn": {
+        "message": "*Default password is 0000"
+    },
+
+    "comment_3_second_section": {
+        "description": "=========================================================================",
+        "message": "3. メイン画面 (popup.html: #second-section)"
+    },
+    "i18n_extTitle": {
+        "message": "Kagi Locked Bookmarks"
+    },
+    "i18n_savePage": {
+        "message": "Save this page"
+    },
+    "i18n_setting": {
+        "message": "Settings"
+    },
+    "i18n_secretMode": {
+        "message": "Open in incognito mode"
+    },
+    "i18n_themeSetting": {
+        "message": "Theme Settings"
+    },
+    "i18n_themeStandard": {
+        "message": "Standard"
+    },
+    "i18n_themeDark": {
+        "message": "Dark"
+    },
+    "i18n_themeFlower": {
+        "message": "Flower"
+    },
+    "i18n_passReset": {
+        "message": "Reset Password"
+    },
+    "i18n_labelNewPass": {
+        "message": "New password input field"
+    },
+    "i18n_placeholderNewPass": {
+        "message": "Enter new password"
+    },
+    "i18n_labelNewPassConfirm": {
+        "message": "New password confirmation input field"
+    },
+    "i18n_placeholderNewPassConfirm": {
+        "message": "Confirm new password"
+    },
+    "i18n_changePassBtn": {
+        "message": "Change Password"
+    },
+    "i18n_proLicenseAuth": {
+        "message": "Pro Version Activation"
+    },
+    "i18n_labelLicense": {
+        "message": "License key input field"
+    },
+    "i18n_placeholderLicense": {
+        "message": "Enter license key"
+    },
+    "i18n_activateBtn": {
+        "message": "Activate"
+    },
+    "i18n_proDesc": {
+        "message": "*Pro version allows unlimited bookmarks."
+    },
+
+    "comment_4_popup_js": {
+        "description": "=========================================================================",
+        "message": "4. ポップアップ制御用スクリプト (popup.js 内の各種通知メッセージ)"
+    },
+    "i18n_alertUpdateSecure": {
+        "message": "Password storage format has been updated to the latest version for enhanced security."
+    },
+    "i18n_alertDefaultPassWarn": {
+        "message": "Default password is in use. Your data is not secure.\nPlease change your password."
+    },
+    "i18n_proBadgeText": {
+        "message": "Pro"
+    },
+    "i18n_alertProFraudDetect": {
+        "message": "An unauthorized change was detected, and your Pro version has been deactivated.\nPlease re-enter your license code."
+    },
+    "i18n_errorWrongPass": {
+        "message": "Incorrect password"
+    },
+    "i18n_errorFreeLimit": {
+        "message": "You have reached the free tier limit of 5 bookmarks. Upgrading to the Pro version is required."
+    },
+    "i18n_errorDecryptFailed": {
+        "message": "Failed to decrypt data due to a security setting mismatch. It is recommended to uninstall and reinstall the extension. (*Please note that reinstalling will reset all saved data)"
+    },
+    "i18n_deleteBtnLabel": {
+        "message": "Delete"
+    },
+    "i18n_alertMigrationSuccess": {
+        "message": "Previous bookmarks found and securely migrated to the new encryption format."
+    },
+    "i18n_alertPassEmpty": {
+        "message": "Please enter a new password"
+    },
+    "i18n_alertPassMismatch": {
+        "message": "Passwords do not match. Please try again."
+    },
+    "i18n_alertPassUpdateSuccess": {
+        "message": "Password and encrypted data updated successfully!"
+    },
+    "i18n_alertLicenseSuccess": {
+        "message": "Pro version has been activated!"
+    },
+    "i18n_alertLicenseInvalid": {
+        "message": "Invalid license key."
+    },
+
+    "comment_5_background_js": {
+        "description": "=========================================================================",
+        "message": "5. バックグラウンド処理 (background.js 内のアップデート通知)"
+    },
+    "i18n_bgUpdateTitle": {
+        "message": "Update Completed"
+    },
+    "i18n_bgUpdateMessage": {
+        "message": "Kagi Locked Bookmarks has been updated. If data is not syncing properly, reinstallation is recommended. (*Please note that reinstalling will reset all saved data)"
+    }
+}

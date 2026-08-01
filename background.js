@@ -9,8 +9,8 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.notifications.create({
             type: "basic",
             iconUrl: "img/icon128.png",
-            title: "アップデート完了",
-            message: "「カギ付きブックマーク」がアップデートされました。うまく引き継げない場合は、再インストールを推奨します。（※再インストールした場合は、保存されていたすべてのデータはリセットされます）"
+            title: chrome.i18n.getMessage("i18n_bgUpdateTitle"), // 「アップデート完了」
+            message: chrome.i18n.getMessage("i18n_bgUpdateMessage") // 「「カギ付きブックマーク」がアップデートされました。うまく引き継げない場合は、再インストールを推奨します。（※再インストールした場合は、保存されていたすべてのデータはリセットされます）」
         });
     }
 });

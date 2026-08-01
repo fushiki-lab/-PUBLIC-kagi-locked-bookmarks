@@ -134,8 +134,10 @@ input[type="text"] {
     color: #ff4d4d;
     font-weight: bold;
     font-size: 12px;
-    margin-bottom: 10px; /* ボタンとの隙間 */
-    display: none;       /* 最初は消しておく */
+}
+/* エラーメッセージが空っぽの時は、上下の余白もゼロにする */
+.error-text:empty {
+    margin: 0;
 }
 
 /* 入力欄にカーソルが当たった時（変化をつける） */
@@ -205,7 +207,19 @@ summary:hover {
 .setting-label {
     font-size: 11px;
     margin-bottom: 5px;
-    opacity: 0.8;
+    opacity: 0.9;
+}
+
+/* 画面には表示しないが、スクリーンリーダーには読ませる設定 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
 
 .pro-text-css {

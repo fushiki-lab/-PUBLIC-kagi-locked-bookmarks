@@ -1,54 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
         <head>
                 <meta charset="UTF-8">
                 <link rel="stylesheet" href="style.css">
         </head>
+        <!--  -->
         <body>
                 <div id="first-section">
-                        <h3>パスワード認証</h3>
-                        <input type="password" id="passInput" placeholder="パスワードを入力">
-                        <p id="errorMessage" class="error-text"></p>
-                        <button id="unlockBtn">解除</button>
-                        <small>※初期パスワードは 0000 です</small>
+                        <h1 class="visually-hidden" data-i18n="i18n_extTitle"></h1> <!-- (支援技術用) --><!-- カギ付きブックマーク -->
+                        <h3 data-i18n="i18n_passAuth"></h3> <!-- 「パスワード認証」 -->
+
+                        <label class="visually-hidden" for="passInput" data-i18n="i18n_labelPassInput"></label> <!-- (支援技術用) --><!-- パスワード入力欄 -->
+                        <input type="password" id="passInput" data-i18n-placeholder="i18n_placeholderPass" placeholder=""> <!-- 「パスワードを入力」 -->
+                        <p id="errorMessage" class="error-text" aria-live="assertive"></p>
+                        <button id="unlockBtn" data-i18n="i18n_unlock"></button> <!-- 「解除」 -->
+                        <small data-i18n="i18n_initPassWarn"></small> <!-- 「※初期パスワードは 0000 です」 -->
                 </div>
 
+                <p id="globalAudioSpeaker" class="visually-hidden" aria-live="assertive"></p> <!-- (支援技術用) -->
+
                 <div id="second-section">
-                        <h3>カギ付きブックマーク<span id="proStatus" class="pro-text-css"></span></h3>
-                        <button id="myButton">このページを保存</button>
+                        <h3>
+                                <span  data-i18n="i18n_extTitle"></span> <!-- 「カギ付きブックマーク」 -->
+                                <span id="proStatus" class="pro-text-css"></span>
+                        </h3>
+                        <button id="myButton" data-i18n="i18n_savePage"></button> <!-- 「このページを保存」 -->
                         <div id="list_container"></div>
                         
                         <hr>
                         <details>
-                                <summary>設定</summary>
-                                <label>
-                                        <input type="checkbox" id="secretModeSwitch">シークレットモードで開く
-                                </label>
+                                <summary data-i18n="i18n_setting"></summary> <!-- 「設定」 -->
+
+                                <input type="checkbox" id="secretModeSwitch"><label for="secretModeSwitch" data-i18n="i18n_secretMode"></label> <!-- 「シークレットモードで開く」 -->
                                 <div class="theme-selector">
-                                        <p class="setting-label">テーマ設定</p>
+                                        <p class="setting-label" data-i18n="i18n_themeSetting"></p> <!-- テーマ設定 -->
                                         <div class="theme-buttons">
-                                                <button id="setStandard">標準</button>
-                                                <button id="setDark">ダーク</button>
-                                                <button id="setFlower">お花</button>
+                                                <button id="setStandard" data-i18n="i18n_themeStandard"></button> <!-- 標準 -->
+                                                <button id="setDark" data-i18n="i18n_themeDark"></button> <!-- ダーク -->
+                                                <button id="setFlower" data-i18n="i18n_themeFlower"></button> <!-- お花 -->
                                         </div>
                                 </div>
                                 <hr>
                                 
-                                <p class="setting-label">パスワード再設定</p>
-                                <input type="password" id="newPassInput" placeholder="新しいパスワード">
-                                <input type="password" id="newPassConfirm" placeholder="確認のためもう一度入力">
-                                <button id="changePassBtn">パスワード変更</button>
+                                <p class="setting-label" data-i18n="i18n_passReset"></p> <!-- パスワード再設定 -->
+
+                                <label class="visually-hidden" for="newPassInput" data-i18n="i18n_labelNewPass"></label> <!-- (支援技術用) --><!-- 新しいパスワード入力欄 -->
+                                <input type="password" id="newPassInput" data-i18n-placeholder="i18n_placeholderNewPass" placeholder=""> <!-- 新しいパスワードを入力 -->
+                                
+                                
+                                <label class="visually-hidden" for="newPassConfirm" data-i18n="i18n_labelNewPassConfirm"></label> <!-- (支援技術用) --><!-- 新しいパスワード確認用入力欄 -->
+                                <input type="password" id="newPassConfirm" data-i18n-placeholder="i18n_placeholderNewPassConfirm" placeholder=""> <!-- 確認のためもう一度入力 -->
+                                <button id="changePassBtn" data-i18n="i18n_changePassBtn"></button> <!-- パスワード変更 -->
         
                                 <hr>
-                                <p class="setting-label">Pro版ライセンス認証</p>
-                                <input type="text" id="licenseInput" placeholder="ライセンスキーを入力">
-                                <button id="activateBtn">認証する</button>
-                                <small>※Pro版では保存件数が無制限になります。</small>
+                                <p class="setting-label" data-i18n="i18n_proLicenseAuth"></p> <!-- Pro版ライセンス認証 -->
+
+                                <label class="visually-hidden" for="licenseInput" data-i18n="i18n_labelLicense"></label> <!-- (支援技術用) --><!-- ライセンスキー入力欄 -->
+                                <input type="text" id="licenseInput" data-i18n-placeholder="i18n_placeholderLicense" placeholder=""> <!-- ライセンスキーを入力 -->
+                                <button id="activateBtn" data-i18n="i18n_activateBtn"></button> <!-- 認証する -->
+                                <small data-i18n="i18n_proDesc"></small> <!-- ※Pro版では保存件数が無制限になります。 -->
                                 <p id="versionDisplay"></p>
                         </details>
 
                 </div>
-
 
                 <script src="popup.js"></script>
         </body>

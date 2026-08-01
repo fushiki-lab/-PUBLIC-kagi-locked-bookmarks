@@ -1,3 +1,25 @@
+// アクセシビリティ：標準の alert を活用してスクリーンリーダー対応を自動化する仕組み
+const originalAlert = window.alert;
+window.alert = function (message) {
+    const speaker = document.getElementById('globalAudioSpeaker');
+    if (speaker) {
+        // アラートのテキスト（翻訳後の文字）をそのまま見えない領域にコピー
+        speaker.textContent = message;
+
+        // 4秒後に空に戻す
+        setTimeout(() => {
+            speaker.textContent = '';
+        }, 4000);
+    }
+    // これにより、ブラウザが「aria-live」の変更をスクリーンリーダーに伝える時間が生まれ、確実に音声がトリガーされます
+    setTimeout(() => {
+        // 本来のブラウザ標準ダイアログも同時に実行
+        originalAlert(message);
+    }, 100);
+};
+
+
+
 const DEFAULT_HASH = "9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0";
 let currentPasswordHash = DEFAULT_HASH;
 
@@ -18,7 +40,7 @@ chrome.storage.local.get(['savedPassword', 'savedPasswordHash', 'isSecret'], asy
             // 移行が終わったら、古いデータは消しておく
             chrome.storage.local.remove('savedPassword');
             currentPasswordHash = convertedHash;
-            alert("セキュリティ向上のため、パスワードの保存形式を最新の状態にアップデートしました。");
+            alert(chrome.i18n.getMessage("i18n_alertUpdateSecure")); // 「セキュリティ向上のため、パスワードの保存形式を最新の状態にアップデートしました。」
         });
     } 
     // 2. すでにハッシュ形式がある場合は、それを使う
@@ -44,34 +66,58 @@ document.getElementById('unlockBtn').addEventListener('click', async () => {
         isUnlocked = true;
         loginPassword = input; // ★ログイン成功時にパスワードを記憶！(リストの暗号化・復号化のため)
 
-
         
         document.getElementById('first-section').style.display = 'none';
         document.getElementById('second-section').style.display = 'block';
 
+        // アクセシビリティ：新しく表示された「このページを保存」ボタンにフォーカスを移す(パスワード認証が成功しsecond-sectionに移動した際)
+        setTimeout(() => {
+            const saveBtn = document.getElementById('myButton');
+            if (saveBtn) saveBtn.focus();
+        }, 50);
+
         if (currentPasswordHash === DEFAULT_HASH) {
-            alert("初期パスワードが使用されています。保護されていない状態です。\nパスワードを変更してください。");
+            alert(chrome.i18n.getMessage("i18n_alertDefaultPassWarn")); // 「初期パスワードが使用されています。保護されていない状態です。\nパスワードを変更してください。」
         }
 
         // Proなら<span>にProと文字を追加
-        chrome.storage.local.get(['isPro'], (result) => {
-            if (result.isPro) {
-                const proBadge = document.getElementById('proStatus');
-                proBadge.textContent = 'Pro版';
-                proBadge.style.display = 'inline-block';
-            }
-        });
+        const isProVerified = await checkProStatus();
+
+        if (isProVerified) {
+            const proBadge = document.getElementById('proStatus');
+            proBadge.textContent = chrome.i18n.getMessage("i18n_proBadgeText"); // 「Pro版 (英語だとPro)」
+            proBadge.style.display = 'inline-block';
+        }else {
+            // ★ここで区別している
+            chrome.storage.local.get(['isPro'], (result) => {
+                    if (result.isPro === true) {
+                        alert(chrome.i18n.getMessage("i18n_alertProFraudDetect")); // 「不適切な変更を検知したため、Pro版を解除しました。\nライセンスコードを再入力してください。」
+
+                        // falseに戻しておいて、無限に警告されるのを防ぐ
+                        chrome.storage.local.set({ 'isPro': false });
+                    }
+                });
+        }
+
         renderList();
     } else {
-        errorEl.textContent = 'パスワードが違います';
-        errorEl.style.display = 'block'; // エラーが出た時だけ表示する
+
+        errorEl.textContent = '';
         
-        inputEl.value = ""; 
-        inputEl.focus(); 
+        setTimeout(() => {
+            errorEl.textContent = chrome.i18n.getMessage("i18n_errorWrongPass"); // 「パスワードが違います」
+
+            // 入力欄をクリア
+            inputEl.value = ""; 
+        }, 50);
+
+        // スクリーンリーダーがエラーを読み上げる時間を稼ぐため、フォーカス移動を少し遅らせる（500ms程度）
+        setTimeout(() => {
+            inputEl.focus(); 
+        }, 500);
 
         // 2秒後に非表示に戻す
         setTimeout(() => {
-            errorEl.style.display = 'none'; // また隙間を詰める
             errorEl.textContent = '';
         }, 2000);
     }
@@ -94,7 +140,7 @@ const btn = document.getElementById('myButton');
 // 2. 保存ボタンのクリックイベント
 btn.addEventListener('click', async () => {
     // 保存リストとPro状態を同時に取得
-    chrome.storage.local.get(['myBookmarks', 'isPro'], async (result) => {
+    chrome.storage.local.get(['myBookmarks'], async (result) => {
         let list = [];
         // 既存リストを復号して取得
         if (result.myBookmarks) {
@@ -103,11 +149,11 @@ btn.addEventListener('click', async () => {
         }
 
 
-        const isPro = result.isPro || false;
+        const isProVerified = await checkProStatus();
 
         // 【制限】無料版かつ5件以上なら保存させない
-        if (!isPro && list.length >= 5) {
-            alert('無料版の保存上限（5件）に達しました。Pro版へのアップグレードが必要です。');
+        if (!isProVerified && list.length >= 5) {
+            alert(chrome.i18n.getMessage("i18n_errorFreeLimit")); // 「無料版の保存上限（5件）に達しました。Pro版へのアップグレードが必要です。」
             return;
         }
 
@@ -148,13 +194,13 @@ document.getElementById('changePassBtn').addEventListener('click', async () => {
     
     // 1. 未入力チェック
     if (newPass.length < 1) {
-        alert('新しいパスワードを入力してください');
+        alert(chrome.i18n.getMessage("i18n_alertPassEmpty")); // 「新しいパスワードを入力してください」
         return;
     }
 
     // 2. 一致チェック
     if (newPass !== confirmPass) {
-        alert('パスワードが一致しません。もう一度入力してください。');
+        alert(chrome.i18n.getMessage("i18n_alertPassMismatch")); // 「パスワードが一致しません。もう一度入力してください。」
         return;
     }
 
@@ -180,7 +226,7 @@ document.getElementById('changePassBtn').addEventListener('click', async () => {
         }, () => {
             currentPasswordHash = newPassHash;
             loginPassword = newPass; // メモリ上のパスワードも更新！
-            alert('パスワードと保存データを更新しました！');
+            alert(chrome.i18n.getMessage("i18n_alertPassUpdateSuccess")); // 「パスワードと保存データを更新しました！」
             document.getElementById('newPassInput').value = "";
             document.getElementById('newPassConfirm').value = "";
         });
@@ -213,11 +259,11 @@ function renderList() {
                     if (Array.isArray(list) && list.length > 0) {
                         const encryptedData = await encryptData(JSON.stringify(list), loginPassword);
                         chrome.storage.local.set({ myBookmarks: encryptedData }, () => {
-                            alert("以前のブックマークが見つかりました。新しい暗号化形式へ安全に移行しました。");
+                            alert(chrome.i18n.getMessage("i18n_alertMigrationSuccess")); // 「以前のブックマークが見つかりました。新しい暗号化形式へ安全に移行しました。」
                         });
                     }
                 } catch(e) {
-                    alert("データの復号に失敗しました。セキュリティ設定の不整合が起きています。一度この拡張機能をアンインストールし、再度インストールすることを推奨します。（※保存されていたすべてのデータはリセットされます）");
+                    alert(chrome.i18n.getMessage("i18n_errorDecryptFailed")); // 「データの復号に失敗しました。セキュリティ設定の不整合が起きています。一度この拡張機能をアンインストールし、再度インストールすることを推奨します。（※保存されていたすべてのデータはリセットされます）」
                     list = [];
                 }
             }
@@ -289,6 +335,11 @@ function renderList() {
             const delBtn = document.createElement('button');
             delBtn.textContent = '×';
             delBtn.className = 'delete-btn';
+
+            // messages.json からそれぞれの言語の読み上げ用テキストを取得して設定。右のデリートはフォールバック
+            const ariaLabelText = chrome.i18n.getMessage("i18n_deleteBtnLabel") || "Delete";
+            delBtn.setAttribute('aria-label', ariaLabelText);
+
             delBtn.addEventListener('click', () => {
                 deleteItem(index); 
             });
@@ -317,9 +368,12 @@ function deleteItem(index) {
 }
 
 
-// ポップアップが開いた瞬間に、パスワード入力欄にカーソルを強制的に合わせる
-document.getElementById('passInput').focus();
-
+// ポップアップが開いたときに、パスワード入力欄にカーソルを強制的に合わせる
+// 100ミリ秒（0.1秒）だけ処理を遅らせて、スクリーンリーダーの混乱を防ぐ
+setTimeout(() => {
+    const passInput = document.getElementById('passInput');
+    if (passInput) passInput.focus();
+}, 100);
 
 // --- テーマ切り替え処理 ---
 // 各ボタンにクラスの付け替えを命じる
@@ -364,12 +418,26 @@ document.getElementById('activateBtn').addEventListener('click', async () => {
     const CORRECT_HASH = "7abd4f617ab217d17c4201d2450d725ddc40a61855cab8958e61b7dea1718606"; 
 
     if (hashedInput === CORRECT_HASH) {
-        chrome.storage.local.set({ 'isPro': true }, () => {
-            alert('Pro版が有効になりました！');
-            location.reload(); // 画面を更新して制限を解除
+
+// 現在の環境のユーザー固有ソルトを取得（なければその場で安全に自動生成）
+        const saltUint8 = await getOrCreateSalt();
+        // ハッシュ生成の文字列として結合するためにBase64形式に変換
+        const userSaltStr = btoa(String.fromCharCode(...saltUint8));
+
+        // 「ライセンスキーのハッシュ値 + ユーザー固有ソルト + 固定文字列」でこの環境専用のトークンを生成
+        const proToken = await generateHash(CORRECT_HASH + userSaltStr + "pro_secure");
+
+
+        chrome.storage.local.set({ 'isPro': true, 'proToken': proToken }, () => {
+            alert(chrome.i18n.getMessage("i18n_alertLicenseSuccess")); // 「Pro版が有効になりました！」
+
+            // alertがトリガーされる時間（100ms）より少し長く待ってからリロードする
+            setTimeout(() => {
+                location.reload(); // 画面を更新して制限を解除
+            }, 200);
         });
     } else {
-        alert('ライセンスキーが無効です。');
+        alert(chrome.i18n.getMessage("i18n_alertLicenseInvalid")); // 「ライセンスキーが無効です。」
     }
 });
 
@@ -382,7 +450,33 @@ if (versionDisplayEl) {
 
 
 
+// --- Pro版の不正書き換えをチェックする共通関数 ---
+async function checkProStatus() {
+    return new Promise((resolve) => {
+        chrome.storage.local.get(['isPro', 'proToken', 'userSalt'], async (result) => {
+            // isProがtrueでも、proTokenやuserSaltが無ければ不正とみなす
 
+            // どれか1つでも無い場合はそもそも計算せずfalseにする。無料版ユーザーはここではじかれる
+            if (!result.isPro || !result.proToken || !result.userSalt) {
+                resolve(false);
+                return;
+            }
+
+            // 【改ざんチェック】
+            // 現在の環境の userSalt（Base64文字列）と CORRECT_HASH を掛け合わせて、
+            // この環境専用のトークンをその場で計算する
+            const CORRECT_HASH = "7abd4f617ab217d17c4201d2450d725ddc40a61855cab8958e61b7dea1718606";
+            const expectedToken = await generateHash(CORRECT_HASH + result.userSalt + "pro_secure");
+
+            // ストレージに保存されているトークンが、今計算した正規トークンと一致するか
+            if (result.proToken === expectedToken) {
+                resolve(true); // 正真正銘のPro版
+            } else {
+                resolve(false); // デベロッパーツール等による書き換え、または別環境からのコピー
+            }
+        });
+    });
+}
 
 
 // --- 暗号化・復号の共通処理 ---
@@ -470,3 +564,61 @@ async function decryptData(base64Data, password) {
         return null; // パスワード・IV・データのいずれかが不正な場合は復号失敗
     }
 }
+
+// 多言語化（国際化）の適用処理
+function applyLocalization() {
+    // ページ内にある「data-i18n」属性がついたタグをすべて引き連れてくる
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        // タグに書かれている固有の名前（"passAuth" や "unlock" など）を取得する
+        const key = element.getAttribute('data-i18n');
+        
+        // messages.json から、その名前に対応する翻訳メッセージ（日本語か英語）を取ってくる
+        const message = chrome.i18n.getMessage(key);
+        
+        // もし翻訳が見つかったら、タグの中身を書き換える
+        if (message) {
+            element.textContent = message;
+            // 翻訳が見つかったときのみ、lang属性の切り替えを行う
+            syncHtmlLang();
+        }
+    });
+
+    // ページ内にある「data-i18n-placeholder」属性がついたタグをすべて引き連れてくる
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        // タグに書かれている固有の名前（"i18n_placeholderPass" など）を取得する
+        const key = element.getAttribute('data-i18n-placeholder');
+        
+        // messages.json から、その名前に対応する翻訳メッセージ（日本語か英語）を取ってくる
+        const message = chrome.i18n.getMessage(key);
+        
+        // もし翻訳が見つかったら、入力欄のヒント文字を書き換える
+        if (message) {
+            element.placeholder = message;
+            // 翻訳が見つかったときのみ、lang属性の切り替えを行う
+            syncHtmlLang();
+        }
+    });
+}
+
+// アクセシビリティ：適切な HTML lang 属性を判定して切り替える補助関数
+function syncHtmlLang() {
+    // 現在のユーザーのブラウザ言語（ja, en, fr など）を取得
+    const currentLocale = chrome.i18n.getMessage("@@ui_locale");
+    
+    // 基本は en にフォールバックする設定
+    let targetLang = "en";
+    if (currentLocale.startsWith("ja")) {
+        targetLang = "ja";
+    } else if (currentLocale.startsWith("en")) {
+        targetLang = "en";
+    }
+
+    // ★ document.documentElement を使うことで、<html>タグの lang="~" を直接書き換えます
+    if (document.documentElement.lang !== targetLang) {
+        document.documentElement.lang = targetLang;
+    }
+}
+
+
+// ポップアップが開いたときにapplyLocalization()を実行する
+document.addEventListener('DOMContentLoaded', applyLocalization);

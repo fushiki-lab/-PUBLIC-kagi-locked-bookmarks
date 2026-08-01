@@ -1,0 +1,152 @@
+{
+    "comment_1_manifest": {
+        "description": "=========================================================================",
+        "message": "1. マニフェスト設定用 (manifest.json)"
+    },
+    "i18n_extName": {
+        "message": "カギ付きブックマーク(Kagi Locked Bookmarks) BETA"
+    },
+    "i18n_extDesc": {
+        "message": "誰にも見られたくないブックマークを、パスワードで守る特別なブックマーク。安心の日本製 & ソースコード公開で高い透明性を確保。"
+    },
+
+    "comment_2_first_section": {
+        "description": "=========================================================================",
+        "message": "2. パスワード認証画面 (popup.html: #first-section)"
+    },
+    "i18n_passAuth": {
+        "message": "パスワード認証"
+    },
+    "i18n_labelPassInput": {
+        "message": "パスワード入力欄"
+    },
+    "i18n_placeholderPass": {
+        "message": "パスワードを入力"
+    },
+    "i18n_unlock": {
+        "message": "解除"
+    },
+    "i18n_initPassWarn": {
+        "message": "※初期パスワードは 0000 です"
+    },
+
+    "comment_3_second_section": {
+        "description": "=========================================================================",
+        "message": "3. メイン画面 (popup.html: #second-section)"
+    },
+    "i18n_extTitle": {
+        "message": "カギ付きブックマーク"
+    },
+    "i18n_savePage": {
+        "message": "このページを保存"
+    },
+    "i18n_setting": {
+        "message": "設定"
+    },
+    "i18n_secretMode": {
+        "message": "シークレットモードで開く"
+    },
+    "i18n_themeSetting": {
+        "message": "テーマ設定"
+    },
+    "i18n_themeStandard": {
+        "message": "標準"
+    },
+    "i18n_themeDark": {
+        "message": "ダーク"
+    },
+    "i18n_themeFlower": {
+        "message": "お花"
+    },
+    "i18n_passReset": {
+        "message": "パスワード再設定"
+    },
+    "i18n_labelNewPass": {
+        "message": "新しいパスワード入力欄"
+    },
+    "i18n_placeholderNewPass": {
+        "message": "新しいパスワードを入力"
+    },
+    "i18n_labelNewPassConfirm": {
+        "message": "新しいパスワード確認用入力欄"
+    },
+    "i18n_placeholderNewPassConfirm": {
+        "message": "確認のためもう一度入力"
+    },
+    "i18n_changePassBtn": {
+        "message": "パスワード変更"
+    },
+    "i18n_proLicenseAuth": {
+        "message": "Pro版ライセンス認証"
+    },
+    "i18n_labelLicense": {
+        "message": "ライセンスキー入力欄"
+    },
+    "i18n_placeholderLicense": {
+        "message": "ライセンスキーを入力"
+    },
+    "i18n_activateBtn": {
+        "message": "認証する"
+    },
+    "i18n_proDesc": {
+        "message": "※Pro版では保存件数が無制限になります。"
+    },
+
+    "comment_4_popup_js": {
+        "description": "=========================================================================",
+        "message": "4. ポップアップ制御用スクリプト (popup.js 内の各種通知メッセージ)"
+    },
+    "i18n_alertUpdateSecure": {
+        "message": "セキュリティ向上のため、パスワードの保存形式を最新の状態にアップデートしました。"
+    },
+    "i18n_alertDefaultPassWarn": {
+        "message": "初期パスワードが使用されています。保護されていない状態です。\nパスワードを変更してください。"
+    },
+    "i18n_proBadgeText": {
+        "message": "Pro版"
+    },
+    "i18n_alertProFraudDetect": {
+        "message": "不適切な変更を検知したため、Pro版を解除しました。\nライセンスコードを再入力してください。"
+    },
+    "i18n_errorWrongPass": {
+        "message": "パスワードが違います"
+    },
+    "i18n_errorFreeLimit": {
+        "message": "無料版の保存上限（5件）に達しました。Pro版へのアップグレードが必要です。"
+    },
+    "i18n_alertPassEmpty": {
+        "message": "新しいパスワードを入力してください"
+    },
+    "i18n_alertPassMismatch": {
+        "message": "パスワードが一致しません。もう一度入力してください。"
+    },
+    "i18n_alertPassUpdateSuccess": {
+        "message": "パスワードと保存データを更新しました！"
+    },
+    "i18n_alertMigrationSuccess": {
+        "message": "以前のブックマークが見つかりました。新しい暗号化形式へ安全に移行しました。"
+    },
+    "i18n_errorDecryptFailed": {
+        "message": "データの復号に失敗しました。セキュリティ設定の不整合が起きています。一度この拡張機能をアンインストールし、再度インストールすることを推奨します。（※保存されていたすべてのデータはリセットされます）"
+    },
+    "i18n_deleteBtnLabel": {
+        "message": "削除"
+    },
+    "i18n_alertLicenseSuccess": {
+        "message": "Pro版が有効になりました！"
+    },
+    "i18n_alertLicenseInvalid": {
+        "message": "ライセンスキーが無効です。"
+    },
+
+    "comment_5_background_js": {
+        "description": "=========================================================================",
+        "message": "5. バックグラウンド処理 (background.js 内のアップデート通知)"
+    },
+    "i18n_bgUpdateTitle": {
+        "message": "アップデート完了"
+    },
+    "i18n_bgUpdateMessage": {
+        "message": "「カギ付きブックマーク」がアップデートされました。うまく引き継げない場合は、再インストールを推奨します。（※再インストールした場合は、保存されていたすべてのデータはリセットされます）"
+    }
+}
