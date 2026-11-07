@@ -46,6 +46,9 @@
     "i18n_secretMode": {
         "message": "Open in incognito mode"
     },
+    "i18n_secretModeNote": {
+        "message": "*Recommended. If turned off, opened pages stay in your browser history and may appear in address bar suggestions."
+    },
     "i18n_themeSetting": {
         "message": "Theme Settings"
     },
@@ -116,6 +119,12 @@
     },
     "i18n_errorDecryptFailed": {
         "message": "Failed to decrypt data due to a security setting mismatch. It is recommended to uninstall and reinstall the extension. (*Please note that reinstalling will reset all saved data)"
+    },
+    "i18n_moveUpLabel": {
+        "message": "Reorder this bookmark up"
+    },
+    "i18n_moveDownLabel": {
+        "message": "Reorder this bookmark down"
     },
     "i18n_deleteBtnLabel": {
         "message": "Delete"

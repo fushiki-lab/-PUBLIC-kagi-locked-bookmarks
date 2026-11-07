@@ -4,7 +4,7 @@
                 <meta charset="UTF-8">
                 <link rel="stylesheet" href="style.css">
         </head>
-        <!--  -->
+
         <body>
                 <div id="first-section">
                         <h1 class="visually-hidden" data-i18n="i18n_extTitle"></h1> <!-- (支援技術用) --><!-- カギ付きブックマーク -->
@@ -32,6 +32,9 @@
                                 <summary data-i18n="i18n_setting"></summary> <!-- 「設定」 -->
 
                                 <input type="checkbox" id="secretModeSwitch"><label for="secretModeSwitch" data-i18n="i18n_secretMode"></label> <!-- 「シークレットモードで開く」 -->
+                                <small class="note-text" data-i18n="i18n_secretModeNote"></small> <!-- 「※オンを推奨します。オフにすると、開いたページが履歴に残り、検索バーの候補に出る可能性があります。」 -->
+                                
+
                                 <div class="theme-selector">
                                         <p class="setting-label" data-i18n="i18n_themeSetting"></p> <!-- テーマ設定 -->
                                         <div class="theme-buttons">
@@ -58,7 +61,7 @@
                                 <label class="visually-hidden" for="licenseInput" data-i18n="i18n_labelLicense"></label> <!-- (支援技術用) --><!-- ライセンスキー入力欄 -->
                                 <input type="text" id="licenseInput" data-i18n-placeholder="i18n_placeholderLicense" placeholder=""> <!-- ライセンスキーを入力 -->
                                 <button id="activateBtn" data-i18n="i18n_activateBtn"></button> <!-- 認証する -->
-                                <small data-i18n="i18n_proDesc"></small> <!-- ※Pro版では保存件数が無制限になります。 -->
+                                <small class="note-text" data-i18n="i18n_proDesc"></small> <!-- ※Pro版では保存件数が無制限になります。 -->
                                 <p id="versionDisplay"></p>
                         </details>
 

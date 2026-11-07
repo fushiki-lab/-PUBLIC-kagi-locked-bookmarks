@@ -140,6 +140,12 @@ input[type="text"] {
     margin: 0;
 }
 
+/* --- 補足説明の文字（ボタンや入力欄の下に出す小さな注意書き） --- */
+.note-text {
+    display: block;   /* 独立した行にして、ボタンなどの次でも改行されるようにする */
+    margin-top: 4px;  /* 上の要素との隙間 */
+}
+
 /* 入力欄にカーソルが当たった時（変化をつける） */
 input[type="password"]:focus,
 input[type="text"]:focus {
@@ -182,6 +188,36 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+
+
+.move-btn {
+    padding: 1px 4px; /* 元のbutton共通スタイルより少し小さめに調整 */
+}
+.move-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/* ↑↓をまとめる箱を、普段は幅ゼロにして隠す */
+.move-actions {
+    display: flex;
+    gap: 2px;
+    overflow: hidden;      /* 幅を0にした時にボタンをはみ出させず隠す */
+    width: 0;               /* 普段はこの箱の幅がゼロ＝タイトル表示に幅を譲る */
+    opacity: 0;
+    transition: width 0.15s ease, opacity 0.15s ease;
+    flex-shrink: 0;         /* 表示時に潰れないようにする */
+    margin-right: 2px;
+}
+
+/* ホバー時、またはキーボードでボタンにフォーカスした時だけ幅を広げて表示 */
+li:hover .move-actions,
+li:focus-within .move-actions {
+    width: 32px; /* ▲▼ボタン2個分の目安。見た目を見ながら調整 */
+    opacity: 1;
+}
+
 
 /* 削除ボタンだけ右端に飛ばす */
 .delete-btn {

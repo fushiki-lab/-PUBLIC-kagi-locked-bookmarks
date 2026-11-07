@@ -46,6 +46,9 @@
     "i18n_secretMode": {
         "message": "シークレットモードで開く"
     },
+    "i18n_secretModeNote": {
+        "message": "※オンを推奨します。オフにすると、開いたページが履歴に残り、検索バーの候補に出る可能性があります。"
+    },
     "i18n_themeSetting": {
         "message": "テーマ設定"
     },
@@ -128,6 +131,12 @@
     },
     "i18n_errorDecryptFailed": {
         "message": "データの復号に失敗しました。セキュリティ設定の不整合が起きています。一度この拡張機能をアンインストールし、再度インストールすることを推奨します。（※保存されていたすべてのデータはリセットされます）"
+    },
+    "i18n_moveUpLabel": {
+        "message": "このブックマークを一つ上へ並び替え"
+    },
+    "i18n_moveDownLabel": {
+        "message": "このブックマークを一つ下へ並び替え"
     },
     "i18n_deleteBtnLabel": {
         "message": "削除"

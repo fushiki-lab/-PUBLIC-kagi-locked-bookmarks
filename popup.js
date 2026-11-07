@@ -28,7 +28,7 @@ let loginPassword = ""; // リストの暗号化・復号化のため入力さ�
 
 // 起動時の処理
 // 起動時にストレージから「保存されたパスワード」と「シークレット設定」を読み込む
-chrome.storage.local.get(['savedPassword', 'savedPasswordHash', 'isSecret'], async (result) => {
+chrome.storage.local.get(['savedPassword', 'savedPasswordHash', 'isSecret', 'secretModeInitialized'], async (result) => {
 // 1. もし「古い形式(平文)」のパスワードが残っていて、かつ「新しい形式」がまだ無い場合
     if (result.savedPassword && !result.savedPasswordHash) {
         // 古いパスワードをその場でハッシュ化して、新しいキーで保存し直す
@@ -47,8 +47,14 @@ chrome.storage.local.get(['savedPassword', 'savedPasswordHash', 'isSecret'], asy
     else if (result.savedPasswordHash) {
         currentPasswordHash = result.savedPasswordHash; // 保存されていれば上書き
     }
+
     // シークレット設定（スイッチの状態）を復元
-    if (result.isSecret !== undefined) {
+    if (!result.secretModeInitialized) {
+        // 新規ユーザー、またはver0.9.3の初回起動：全員オンにして「初期化済み」の印を残す
+        document.getElementById('secretModeSwitch').checked = true;
+        chrome.storage.local.set({ isSecret: true, secretModeInitialized: true });
+    } else if (result.isSecret !== undefined) {
+        // 2回目以降：ユーザーが選んだ状態（trueかfalse）をそのまま復元
         document.getElementById('secretModeSwitch').checked = result.isSecret;
     }
 });
@@ -315,7 +321,7 @@ function renderList() {
                         if (secretWindow) {
                                 // 3. すでにシークレットウィンドウがあれば、そこに新しいタブを作る
                                 chrome.tabs.create({ url: url, windowId: secretWindow.id });
-                                // そのウィンドウを最前面に持ってくる（お好みで）
+                                // そのウィンドウを最前面に持ってくる
                                 chrome.windows.update(secretWindow.id, { focused: true });
                         } else {
                                 // 4. なければ、新しくシークレットウィンドウを作る（最初だけ）
@@ -331,6 +337,38 @@ function renderList() {
             // --- 組み立て ---
             li.appendChild(icon); // ロゴを最初に入れる
             li.appendChild(a);
+
+
+            // 上へ移動ボタン
+            const upBtn = document.createElement('button');
+            upBtn.textContent = '↑';
+            upBtn.className = 'move-btn';
+            upBtn.setAttribute('aria-label', chrome.i18n.getMessage("i18n_moveUpLabel") || "Move up");
+            if (index === 0) upBtn.disabled = true; // 先頭ならグレーアウト
+            upBtn.addEventListener('click', () => {
+                moveItem(index, -1);
+            });
+
+            // 下へ移動ボタン
+            const downBtn = document.createElement('button');
+            downBtn.textContent = '↓';
+            downBtn.className = 'move-btn';
+            downBtn.setAttribute('aria-label', chrome.i18n.getMessage("i18n_moveDownLabel") || "Move down");
+            if (index === list.length - 1) downBtn.disabled = true; // 末尾ならグレーアウト
+            downBtn.addEventListener('click', () => {
+                moveItem(index, 1);
+            });
+
+
+            // ↑↓をまとめる箱を作ってliに入れる
+            const moveActions = document.createElement('div');
+            moveActions.className = 'move-actions';
+            moveActions.appendChild(upBtn);
+            moveActions.appendChild(downBtn);
+            li.appendChild(moveActions);
+
+
+
             // (削除ボタンを最後に入れる)
             const delBtn = document.createElement('button');
             delBtn.textContent = '×';
@@ -358,6 +396,30 @@ function deleteItem(index) {
         let list = JSON.parse(decrypted || "[]");
 
         list.splice(index, 1);
+
+        const encryptedData = await encryptData(JSON.stringify(list), loginPassword);
+
+        chrome.storage.local.set({ myBookmarks: encryptedData }, () => {
+            renderList();
+        });
+    });
+}
+
+
+
+// 5. 並び替え用の関数（direction: -1で上へ、+1で下へ）
+function moveItem(index, direction) {
+    chrome.storage.local.get(['myBookmarks'], async (result) => {
+        const decrypted = await decryptData(result.myBookmarks, loginPassword);
+        let list = JSON.parse(decrypted || "[]");
+
+        const targetIndex = index + direction;
+
+        // 範囲外（先頭より上、末尾より下）への移動は何もしない
+        if (targetIndex < 0 || targetIndex >= list.length) return;
+
+        // 配列内で2つの要素を入れ替える
+        [list[index], list[targetIndex]] = [list[targetIndex], list[index]];
 
         const encryptedData = await encryptData(JSON.stringify(list), loginPassword);
 
